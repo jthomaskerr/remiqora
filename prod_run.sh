@@ -33,8 +33,11 @@ echo "[Frontend Build] Building production bundle (vue-tsc + vite build)..."
 
 # 4. Start Production Server on port 9000 (serves API and SPA bundle)
 echo ""
-echo "[Launcher] Starting production server on http://127.0.0.1:9000 ..."
-( sleep 2 && open "http://127.0.0.1:9000" ) &
+# REMIQORA_HOST=0.0.0.0 opts in to LAN access (no built-in authentication).
+HOST="${REMIQORA_HOST:-127.0.0.1}"
+PORT="${REMIQORA_PORT:-9000}"
+echo "[Launcher] Starting production server on http://$HOST:$PORT ..."
+( sleep 2 && open "http://127.0.0.1:$PORT" ) &
 
 cd backend
-exec .venv/bin/python3 -m uvicorn app.main:app --host 127.0.0.1 --port 9000
+exec .venv/bin/python3 -m uvicorn app.main:app --host "$HOST" --port "$PORT"

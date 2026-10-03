@@ -17,6 +17,7 @@
  *   for those nodes, drastically saving CPU (Silent Stream Optimization).
  */
 import { getSharedAudioCtx } from '../composables/audioPlayback'
+import { apiUrl } from '../api/backend'
 
 export interface EqSettings {
   low: number
@@ -685,7 +686,7 @@ const FAILED_RETRY_MS = 10_000
 export function decodeStem(url: string): Promise<AudioBuffer> {
   let entry = bufferCache.get(url)
   if (!entry) {
-    entry = fetch(url)
+    entry = fetch(apiUrl(url))
       .then((r) => {
         // Without this a 404 page is handed to decodeAudioData, which fails
         // with an unhelpful decode error instead of saying the file is gone.

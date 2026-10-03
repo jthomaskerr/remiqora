@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { claimPlayback, releasePlaybackIfCurrent } from '../../composables/audioPlayback'
 import PlayIcon from './icons/PlayIcon.vue'
 import PauseIcon from './icons/PauseIcon.vue'
+import { apiUrl } from '../../api/backend'
 
 const { t } = useI18n()
 
@@ -140,7 +141,7 @@ onBeforeUnmount(() => {
       v-for="(src, idx) in sources"
       :key="src"
       :ref="(el) => (audioEls[idx] = el as HTMLAudioElement)"
-      :src="src"
+      :src="apiUrl(src)"
       preload="auto"
       @loadedmetadata="onLoadedMetadata(idx)"
       @timeupdate="onTimeUpdate(idx)"

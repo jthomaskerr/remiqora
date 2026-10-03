@@ -7,6 +7,7 @@ import { MODEL_LABELS, MODEL_ROUTES, useModelSwitch } from '../../composables/us
 import { setLocale, currentLocale, type LocaleCode } from '../../i18n'
 import type { ModelId, ModelRuntimeStatus } from '../../types'
 import HelpModal from './HelpModal.vue'
+import { backendUrl, setBackendUrl } from '../../api/backend'
 
 const orchestrator = useOrchestratorStore()
 const route = useRoute()
@@ -14,6 +15,24 @@ const { selectModel } = useModelSwitch()
 const { t, locale } = useI18n()
 const helpOpen = ref(false)
 const HELP_SECTIONS = ['what', 'engines', 'ace', 'yue', 'lora', 'stems', 'editor', 'library', 'local'] as const
+
+// The backend this UI talks to, shown as its host so a split setup makes clear which machine is in use.
+function hostOf(url: string): string {
+  try {
+    return new URL(url).host
+  } catch {
+    return url
+  }
+}
+const backendLabel = backendUrl() ? hostOf(backendUrl()) : ''
+
+function changeBackend() {
+  const next = window.prompt(t('header.backendPrompt'), backendUrl())
+  if (next === null) return
+  setBackendUrl(next)
+  // Every store holds data from the old backend, so start clean.
+  window.location.reload()
+}
 
 function toggleLocale() {
   const next: LocaleCode = currentLocale() === 'ru' ? 'en' : 'ru'
@@ -83,6 +102,14 @@ async function onSelect(id: ModelId) {
       </router-link>
 
       <div class="ml-auto flex items-center gap-2 sm:order-last sm:ml-0">
+        <button
+          type="button"
+          :title="t('header.backend')"
+          class="min-h-9 max-w-48 truncate rounded-lg border border-border bg-panel-2 px-3 py-2 text-xs font-semibold text-text-dim hover:text-text"
+          @click="changeBackend"
+        >
+          {{ backendLabel || t('header.backendLocal') }}
+        </button>
         <button
           type="button"
           class="min-h-9 rounded-lg border border-border bg-panel-2 px-3 py-2 text-xs font-semibold text-text-dim hover:text-text"

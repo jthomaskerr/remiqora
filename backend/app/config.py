@@ -128,6 +128,9 @@ CUDA_BIN_DIR = _env_path("CUDA_BIN_DIR", r"C:\Program Files\NVIDIA GPU Computing
 CUDA_BIN64_DIR = CUDA_BIN_DIR / "x64"
 
 UV_BIN = os.getenv("UV_BIN", "uv")
+# Origins allowed to call the API from a browser, comma-separated, for a UI served from another
+# machine or port (e.g. "http://laptop.local:5173"). "*" allows any origin. Empty keeps same-origin only.
+CORS_ORIGINS = [o.strip() for o in os.getenv("REMIQORA_CORS_ORIGINS", "").split(",") if o.strip()]
 ACE_STEP_DEVICE = os.getenv("ACE_STEP_DEVICE", "").strip()
 ACE_STEP_API_PORT = int(os.getenv("ACE_STEP_API_PORT", "8001"))
 # Checkpoint folder names under ACE_STEP_DIR/checkpoints. acestep-api has no

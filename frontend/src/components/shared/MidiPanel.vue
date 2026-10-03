@@ -5,6 +5,7 @@ import * as midiApi from '../../api/midi'
 import type { MidiSource, MidiStatus } from '../../api/midi'
 import { drawPianoRoll, parseMidiBytes, playMidiNotes } from '../../audio/miniMidiPlayer'
 import type { MidiParsed, MidiSynthHandle } from '../../audio/miniMidiPlayer'
+import { apiUrl } from '../../api/backend'
 
 const props = defineProps<{ trackId: number }>()
 const { t } = useI18n()
@@ -95,7 +96,7 @@ async function getOrLoadMidi(source: MidiSource): Promise<MidiParsed | null> {
   const url = status.value?.urls[source]
   if (!url) return null
   try {
-    const resp = await fetch(url)
+    const resp = await fetch(apiUrl(url))
     const buf = await resp.arrayBuffer()
     const parsed = parseMidiBytes(buf)
     midiCache.value[source] = parsed

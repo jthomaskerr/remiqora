@@ -5,6 +5,7 @@ import { claimPlayback, fetchAndComputePeaks, peaksCache, releasePlaybackIfCurre
 import { formatClock } from '../../composables/formatCreated'
 import PlayIcon from './icons/PlayIcon.vue'
 import PauseIcon from './icons/PauseIcon.vue'
+import { apiUrl } from '../../api/backend'
 
 const { t } = useI18n()
 
@@ -211,6 +212,6 @@ onBeforeUnmount(() => {
       <template v-if="started">{{ elapsedLabel }}</template>
       <span v-if="totalLabel" :class="totalClass">{{ started ? ` / ${totalLabel}` : totalLabel }}</span>
     </span>
-    <audio ref="audioEl" :src="src" preload="none" class="hidden" @timeupdate="onTimeUpdate" @ended="onEnded" @loadedmetadata="onLoaded"></audio>
+    <audio ref="audioEl" :src="apiUrl(src)" preload="none" class="hidden" @timeupdate="onTimeUpdate" @ended="onEnded" @loadedmetadata="onLoaded"></audio>
   </div>
 </template>

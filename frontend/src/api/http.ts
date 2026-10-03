@@ -1,3 +1,5 @@
+import { apiUrl } from './backend'
+
 export class ApiError extends Error {
   status: number
   constructor(message: string, status: number) {
@@ -20,7 +22,7 @@ async function parseErrorBody(resp: Response): Promise<string> {
 }
 
 export async function apiFetch<T>(url: string, init?: RequestInit): Promise<T> {
-  const resp = await fetch(url, init)
+  const resp = await fetch(apiUrl(url), init)
   if (!resp.ok) {
     throw new ApiError(await parseErrorBody(resp), resp.status)
   }

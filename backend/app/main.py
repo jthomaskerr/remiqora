@@ -3,6 +3,7 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 from .api.routes_lora_dataset import router as lora_dataset_router
@@ -14,7 +15,7 @@ from .api.routes_proxy import router as proxy_router
 from .api.routes_stems import router as stems_router
 from .api.routes_tracks import router as tracks_router
 from .api.routes_yue2_upload import router as yue2_upload_router
-from .config import FRONTEND_DIST_DIR
+from .config import CORS_ORIGINS, FRONTEND_DIST_DIR
 from .orchestrator.manager import manager
 
 
@@ -27,6 +28,16 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Remiqora", lifespan=lifespan)
+
+if CORS_ORIGINS:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=CORS_ORIGINS,
+        allow_methods=["*"],
+        allow_headers=["*"],
+        # Lets the UI read the download filename on cross-origin track downloads.
+        expose_headers=["Content-Disposition"],
+    )
 
 app.include_router(orchestrator_router)
 app.include_router(tracks_router)

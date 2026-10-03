@@ -4,6 +4,7 @@ import type { GenerateMusicRequest } from '../api/aceStep'
 import * as tracksApi from '../api/tracks'
 import type { JobStatus } from '../types'
 import { i18n } from '../i18n'
+import { apiUrl } from '../api/backend'
 
 const t = i18n.global.t
 
@@ -181,7 +182,7 @@ export const useAceStepStore = defineStore('aceStep', {
       const dbIds: number[] = []
       for (const url of job.audioUrls) {
         try {
-          const resp = await fetch(url)
+          const resp = await fetch(apiUrl(url))
           if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
           const blob = await resp.blob()
           const saved = await tracksApi.saveTrack(
