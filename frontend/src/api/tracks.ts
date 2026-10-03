@@ -1,5 +1,6 @@
 import { apiFetch, apiJson } from './http'
 import type { TrackOrigin } from '../types'
+import { apiUrl } from './backend'
 
 export interface SavedTrack {
   id: number
@@ -64,11 +65,11 @@ export async function deleteTrack(id: number): Promise<void> {
 }
 
 export function trackAudioUrl(id: number): string {
-  return `/api/tracks/${id}/audio`
+  return apiUrl(`/api/tracks/${id}/audio`)
 }
 
 export async function trackAbc(id: number): Promise<string> {
-  const resp = await fetch(`/api/tracks/${id}/abc`)
+  const resp = await fetch(apiUrl(`/api/tracks/${id}/abc`))
   if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
   return resp.text()
 }

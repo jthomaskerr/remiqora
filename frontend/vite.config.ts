@@ -8,7 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:9000',
+        // REMIQORA_BACKEND_URL points the dev server at a backend on another machine.
+        target: process.env.REMIQORA_BACKEND_URL || 'http://127.0.0.1:9000',
         changeOrigin: true,
       },
     },

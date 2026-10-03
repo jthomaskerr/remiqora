@@ -30,7 +30,7 @@ if [[ ! -d "frontend/node_modules" ]]; then
 fi
 
 # 3. Launch Backend
-echo "[Launcher] Starting Backend on http://127.0.0.1:9000 ..."
+echo "[Launcher] Starting Backend on http://${REMIQORA_HOST:-127.0.0.1}:${REMIQORA_PORT:-9000} ..."
 (cd backend && ./run.sh) &
 BACKEND_PID=$!
 

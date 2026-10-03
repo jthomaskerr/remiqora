@@ -1,3 +1,4 @@
+import { apiUrl } from '../api/backend'
 import { useSettingsStore } from '../stores/settings'
 
 /**
@@ -8,7 +9,7 @@ import { useSettingsStore } from '../stores/settings'
 export async function downloadSavedTrack(trackId: number, filename: string): Promise<void> {
   await useSettingsStore().ensureArtist()
   const a = document.createElement('a')
-  a.href = `/api/tracks/${trackId}/download`
+  a.href = apiUrl(`/api/tracks/${trackId}/download`)
   a.download = filename
   a.click()
 }

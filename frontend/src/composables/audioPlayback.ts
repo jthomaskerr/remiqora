@@ -10,6 +10,8 @@
  * is one shared instance across every WaveformPlayer on the page.
  */
 
+import { apiUrl } from '../api/backend'
+
 export const peaksCache = new Map<string, number[]>()
 const inFlightPeaks = new Map<string, Promise<number[]>>()
 
@@ -55,7 +57,7 @@ export async function fetchAndComputePeaks(src: string, barCount = 140, priority
   if (inFlight) return inFlight
 
   inFlight = queueDecode(async () => {
-    const resp = await fetch(src)
+    const resp = await fetch(apiUrl(src))
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
     const buf = await resp.arrayBuffer()
     const audioBuffer = await getSharedAudioCtx().decodeAudioData(buf)

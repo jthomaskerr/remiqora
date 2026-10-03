@@ -15,5 +15,8 @@ if [[ ! -x ".venv/bin/python3" ]]; then
     .venv/bin/pip install -r requirements.txt
 fi
 
-echo "Starting Remiqora backend on http://127.0.0.1:9000"
-exec .venv/bin/python3 -m uvicorn app.main:app --host 127.0.0.1 --port 9000
+# REMIQORA_HOST=0.0.0.0 opts in to LAN access (no built-in authentication).
+HOST="${REMIQORA_HOST:-127.0.0.1}"
+PORT="${REMIQORA_PORT:-9000}"
+echo "Starting Remiqora backend on http://$HOST:$PORT"
+exec .venv/bin/python3 -m uvicorn app.main:app --host "$HOST" --port "$PORT"
